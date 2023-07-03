@@ -8,8 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.2"
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/js": "^7.2.96",
+    "vue": "^3.2.26",
+    "vue-router": "^4.2.2",
+    "vuetify": "3.3.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
