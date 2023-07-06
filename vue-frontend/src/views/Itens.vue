@@ -1,15 +1,16 @@
 <script setup>
-import Nav from '../components/Nav.vue'
+import Nav from '../components/Nav.vue';
+import api from '../services/api.js';
 </script>
 <template>
     <div class="container">
         <Nav></Nav>
         <v-container>
             <v-row no-gutters>
-                <v-col >
+                <v-col>
                     <section class="container-title">
                         <h1>ITENS</h1>
-                        <svg-icon type="mdi" style="color: #CF3A69" :size="32" class="icone" :path="path"></svg-icon>
+                        <svg-icon type="mdi" style="color: #CF3A69" :size="32" class="icone" :path="iconGroup"></svg-icon>
                     </section>
                 </v-col>
                 <v-col cols="1">
@@ -24,17 +25,32 @@ import Nav from '../components/Nav.vue'
                 <thead>
                     <tr>
                         <th class="text-left">
-                            Name
+                            Código
                         </th>
                         <th class="text-left">
-                            Calories
+                            Nome
+                        </th>
+                        <th class="text-left">
+                            Descrição
+                        </th>
+                        <th class="text-left actions-header">
+                            Ações
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in desserts" :key="item.name">
+                    <tr v-for="item in itens" :key="item.id">
+                        <td>{{ item.id }}</td>
                         <td>{{ item.name }}</td>
-                        <td>{{ item.calories }}</td>
+                        <td>{{ item.description }}</td>
+                        <td class="actions">
+                            <svg-icon type="mdi" style="color: #58b7e0" :size="32" class="iconTable"
+                                :path="iconDetail"></svg-icon>
+                            <svg-icon type="mdi" style="color: #e0e058" :size="32" class="iconTable"
+                                :path="iconEdit"></svg-icon>
+                            <svg-icon type="mdi" style="color: #e05858" :size="32" class="iconTable"
+                                :path="iconDelete"></svg-icon>
+                        </td>
                     </tr>
                 </tbody>
             </v-table>
@@ -43,7 +59,7 @@ import Nav from '../components/Nav.vue'
 </template>
 <script>
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiAccountGroup } from '@mdi/js';
+import { mdiAccountGroup, mdiPencilOutline, mdiTrashCanOutline, mdiEyeOutline } from '@mdi/js';
 
 export default {
     components: {
@@ -51,51 +67,29 @@ export default {
     },
     data() {
         return {
-            path: mdiAccountGroup,
-            desserts: [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                },
-            ],
+            iconGroup: mdiAccountGroup,
+            iconEdit: mdiPencilOutline,
+            iconDelete: mdiTrashCanOutline,
+            iconDetail: mdiEyeOutline,
+            itens: [],
         }
     },
+    created() {
+        this.getItens();
+    },
+    methods: {
+        getItens() {
+            api
+                .get("/itens/")
+                .then((res) => {
+                    this.itens = res.data;
+                    console.log(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    }
 }
 </script>
 <style scoped>
@@ -111,6 +105,7 @@ export default {
     color: #CF3A69;
     font-weight: bold !important;
 }
+
 .icone {
     align-self: center;
 }
@@ -122,6 +117,18 @@ h1 {
 .bnt {
     background-color: #0066FF;
     color: white;
+}
+
+.iconTable {
+    margin-left: 1em;
+}
+
+.actions {
+    width: 15vw;
+}
+
+.actions-header {
+    padding-left: 2em !important;
 }
 </style>
   
